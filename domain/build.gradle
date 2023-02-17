@@ -2,6 +2,10 @@ plugins {
     id 'java-library'
     id 'org.jetbrains.kotlin.jvm'
 }
+dependencies {
+    //DI
+    implementation "io.insert-koin:koin-core:$koin_version"
+}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_7
