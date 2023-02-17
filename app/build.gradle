@@ -91,6 +91,10 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
+    //PAGING
+    implementation "androidx.paging:paging-compose:$paging_compose_version"
+    implementation "androidx.paging:paging-runtime:$paging_version"
+
     testImplementation "io.kotest:kotest-runner-junit5:$kotest_version"
     testImplementation "io.kotest:kotest-assertions-core:$kotest_version"
 

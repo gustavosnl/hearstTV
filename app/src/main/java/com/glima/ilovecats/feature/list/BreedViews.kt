@@ -3,13 +3,13 @@ package com.glima.ilovecats.feature.list
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.glima.domain.model.Breed
 
 @Composable
@@ -25,11 +25,11 @@ fun BreedItem(breed: Breed) {
 
 @Composable
 fun BreedList(viewModel: BreedListViewModel) {
-//    val breeds = viewModel.breeds.re()
-//
-//    LazyColumn {
-//        items(breeds.value) { breed ->
-//            BreedItem(breed = breed)
-//        }
-//    }
+    val lazyBreeds = viewModel.breeds.collectAsLazyPagingItems()
+
+    LazyColumn {
+        items(lazyBreeds) { breed ->
+            BreedItem(breed = breed!!)
+        }
+    }
 }
