@@ -1,5 +1,6 @@
 package com.glima.ilovecats.di
 
+import com.glima.data.repository.CatApi
 import com.glima.ilovecats.BuildConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
@@ -42,6 +43,10 @@ object AppModule {
                     chain.proceed(request)
                 }
                 .build()
+        }
+
+        single<CatApi> {
+            (get() as Retrofit).create(CatApi::class.java)
         }
     }
 }
