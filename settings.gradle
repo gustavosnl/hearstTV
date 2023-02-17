@@ -14,3 +14,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "I love cats 2.0"
 include ':app'
+include ':app:data'
+include ':domain'
+include ':data'
