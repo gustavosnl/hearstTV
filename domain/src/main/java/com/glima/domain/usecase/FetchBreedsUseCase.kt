@@ -5,7 +5,7 @@ import com.glima.domain.repository.BreedRepository
 
 interface FetchBreedsUseCase {
 
-    suspend operator fun invoke(page: Int): List<Breed>
+    suspend operator fun invoke(page: Int = 0): List<Breed>
 }
 
 class FetchBreedsUseCaseImpl(private val repository: BreedRepository) : FetchBreedsUseCase {

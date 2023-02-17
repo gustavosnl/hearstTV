@@ -28,6 +28,7 @@ internal class BreedMapperTest : DescribeSpec() {
                 affectionLevel = 5,
                 intelligence = 4
             )
+
             beforeEach {
                 output = mapper.toDomain(response)
             }
@@ -72,7 +73,7 @@ internal class BreedMapperTest : DescribeSpec() {
                 context("common breed") {
                     response = response.copy(isRare = 0)
 
-                    it("maps correctly to false") {
+                    it("maps to false") {
                         output.isRare.shouldBeFalse()
                     }
                 }
@@ -80,7 +81,7 @@ internal class BreedMapperTest : DescribeSpec() {
                 context("rare breed") {
                     response = response.copy(isRare = 1)
 
-                    it("maps correctly to true") {
+                    it("maps to true") {
                         output.isRare.shouldBeTrue()
                     }
                 }
