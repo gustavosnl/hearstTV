@@ -2,8 +2,16 @@ package com.glima.ilovecats.feature.detail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.glima.domain.model.Breed
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -16,7 +24,10 @@ fun BreedDetailScreen(
 
     when (val breedDetailState = viewModel.breedDetail.value) {
         is BreedDetailState.Loaded -> {
-            BreedDetail(breedDetailState.breed)
+            Column() {
+                BreedGallery(viewModel)
+                BreedDetail(breedDetailState.breed)
+            }
         }
         is BreedDetailState.Loading -> {
             Text(text = "Carregando")
@@ -27,7 +38,6 @@ fun BreedDetailScreen(
 @Composable
 fun BreedDetail(breed: Breed) {
     Column() {
-        BreedGallery(breed)
         Text(text = breed.name)
         Text(text = breed.description)
         Row() {
@@ -54,8 +64,24 @@ fun BreedLifeSpan(lifeSpan: String) {
 }
 
 @Composable
-fun BreedGallery(breed: Breed) {
-    Text(text = "${breed.name} Gallery")
+fun BreedGallery(viewModel: BreedDetailViewModel) {
+    when (val imageUrls = viewModel.breedGallery.value) {
+        is BreedGalleryState.Loaded -> {
+            LazyRow(
+            ) {
+                items(imageUrls.imageUrls) {
+                    AsyncImage(
+                        model = it,
+                        contentDescription = "A picture of a cat",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .height(320.dp)
+                            .aspectRatio(1f, true)
+                    )
+                }
+            }
+        }
+    }
 }
 
 

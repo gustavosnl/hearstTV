@@ -6,6 +6,10 @@ import com.glima.domain.repository.BreedRepository
 class BreedDetailLogic(private val repository: BreedRepository) {
 
     suspend fun loadBreedDetail(breedId: String): Breed {
-        return repository.fetchBreedDetail(breedId)
+        return repository.loadBreedDetail(breedId)
+    }
+
+    suspend fun loadGallery(breedId: String): List<String> {
+        return repository.loadBreedGallery(breedId)
     }
 }
