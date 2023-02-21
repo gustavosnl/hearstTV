@@ -5,4 +5,5 @@ import com.glima.domain.model.Breed
 interface BreedRepository {
 
     suspend fun fetchBreedsByPage(page: Int): List<Breed>
+    suspend fun fetchBreedDetail(breedId: String): Breed
 }

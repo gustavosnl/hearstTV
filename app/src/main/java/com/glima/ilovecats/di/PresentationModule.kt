@@ -1,6 +1,7 @@
 package com.glima.ilovecats.di
 
 import com.glima.data.repository.BreedPagingSource
+import com.glima.ilovecats.feature.detail.BreedDetailLogic
 import com.glima.ilovecats.feature.detail.BreedDetailViewModel
 import com.glima.ilovecats.feature.list.BreedListLogic
 import com.glima.ilovecats.feature.list.BreedListViewModel
@@ -15,11 +16,15 @@ object PresentationModule {
         }
 
         viewModel { (breedId: String) ->
-            BreedDetailViewModel(breed = breedId)
+            BreedDetailViewModel(breedId = breedId, logic = get())
         }
 
         single {
             BreedListLogic(get())
+        }
+
+        single {
+            BreedDetailLogic(get())
         }
 
         single {

@@ -10,4 +10,10 @@ class BreedRepositoryImpl(val api: CatApi) : BreedRepository {
         return api.fetchBreedsByPage(page)
             .map { BreedMapper.toDomain(it) }
     }
+
+    override suspend fun fetchBreedDetail(breedId: String): Breed {
+        return api.fetchBreedDetail(breedId).let {
+            BreedMapper.toDomain(it)
+        }
+    }
 }
