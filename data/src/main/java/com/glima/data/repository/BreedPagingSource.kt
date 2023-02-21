@@ -32,6 +32,6 @@ class BreedPagingSource(private val repository: BreedRepository) : PagingSource<
     override fun getRefreshKey(state: PagingState<Int, Breed>): Int? = null
 
     companion object {
-        private const val INITIAL_PAGE_INDEX = 1
+        private const val INITIAL_PAGE_INDEX = 0
     }
 }
