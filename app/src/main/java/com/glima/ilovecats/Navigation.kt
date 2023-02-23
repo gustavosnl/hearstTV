@@ -6,12 +6,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.glima.ilovecats.feature.detail.BreedDetailScreen
-import com.glima.ilovecats.feature.list.BreedList
+import com.glima.ilovecats.feature.list.BreedListScreen
 
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController, startDestination = "breed_list") {
-        composable(route = "breed_list") { BreedList(navController = navController) }
+        composable(route = "breed_list") { BreedListScreen(navController = navController) }
         composable(
             route = "breed_detail/{breed}",
             arguments = listOf(navArgument("breed") { })
