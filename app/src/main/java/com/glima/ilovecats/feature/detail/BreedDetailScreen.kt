@@ -5,34 +5,37 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.glima.domain.model.Breed
 import com.glima.ilovecats.R
+import com.glima.ilovecats.Screen
+import com.glima.ilovecats.feature.list.BreedIcon
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
 fun BreedDetailScreen(
     breed: String,
+    navController: NavHostController,
     viewModel: BreedDetailViewModel = getViewModel(parameters = { parametersOf(breed) })
 ) {
     Column() {
-        TopAppBar(elevation = 4.dp) {
-            Text(text = "")
-        }
-
+        BreedDetailTopAppBar(navController)
         when (val breedDetailState = viewModel.breedDetail.value) {
             is BreedDetailState.Loaded -> {
                 Column() {
@@ -49,14 +52,36 @@ fun BreedDetailScreen(
 }
 
 @Composable
+private fun BreedDetailTopAppBar(navController: NavHostController) {
+    TopAppBar(
+        title = { Text(text = stringResource(id = Screen.BreedDetail.title)) },
+        navigationIcon = {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = stringResource(id = R.string.breed_detail_nav_back)
+                )
+            }
+        })
+}
+
+@Composable
 fun BreedDetail(breed: Breed) {
     Column(Modifier.padding(8.dp)) {
-        Text(
-            text = breed.name,
-            fontSize = 18.sp,
-            fontFamily = FontFamily.Monospace,
-            fontWeight = FontWeight.SemiBold,
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+        ) {
+            BreedIcon(breed)
+            Text(
+                text = breed.name,
+                fontSize = 18.sp,
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
 
         Spacer(modifier = Modifier.size(12.dp))
 
@@ -164,6 +189,11 @@ fun BreedGallery(viewModel: BreedDetailViewModel) {
                                 .aspectRatio(1f, true)
                         )
                     }
+                }
+            }
+            is BreedGalleryState.Loading -> {
+                Box(contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
                 }
             }
         }

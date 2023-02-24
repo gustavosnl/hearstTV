@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">I love cats 2.0</string>
+    <string name="breed_list_title">Cat Breeds</string>
+    <string name="breed_detail_title">Breed Details</string>
+    <string name="breed_detail_nav_back">Navigate back to Breeds list</string>
 </resources>
