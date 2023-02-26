@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.glima.domain.model.Breed
 import com.glima.ilovecats.R
 import com.glima.ilovecats.Screen
@@ -42,7 +42,7 @@ fun BreedDetailScreen(
                 BreedDetail(breedDetailState.breed)
             }
             is BreedDetailState.Loading -> {
-                LinearProgressIndicator()
+                LinearProgressIndicator(Modifier.fillMaxWidth())
             }
             is BreedDetailState.Error -> {
                 Text(text = "Deu ruim")
@@ -181,20 +181,41 @@ fun BreedGallery(viewModel: BreedDetailViewModel) {
             is BreedGalleryState.Loaded -> {
                 LazyRow {
                     items(imageUrls.imageUrls) {
-                        AsyncImage(
+                        SubcomposeAsyncImage(
                             model = it,
-                            contentDescription = "A picture of a cat",
+                            loading = {
+                                Image(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_image_placeholder),
+                                    contentDescription = null
+                                )
+                            },
+                            contentDescription = null,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .height(320.dp)
                                 .aspectRatio(1f, true)
+
                         )
                     }
                 }
             }
             is BreedGalleryState.Loading -> {
-                Box(contentAlignment = Alignment.Center) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
+                    contentAlignment = Alignment.Center
+                ) {
                     CircularProgressIndicator()
+                }
+            }
+            is BreedGalleryState.Error -> {
+                Column() {
+                    Image(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_img_error_placeholder),
+                        contentDescription = null
+                    )
+                    Text(text = stringResource(id = R.string.load_error))
                 }
             }
         }

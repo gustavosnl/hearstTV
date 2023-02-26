@@ -3,4 +3,6 @@
     <string name="breed_list_title">Cat Breeds</string>
     <string name="breed_detail_title">Breed Details</string>
     <string name="breed_detail_nav_back">Navigate back to Breeds list</string>
+    <string name="load_error">Something went wrong when loading the data</string>
+    <string name="retry">Retry</string>
 </resources>
