@@ -10,13 +10,14 @@ import kotlinx.coroutines.launch
 sealed class BreedDetailState {
     object Loading : BreedDetailState()
     class Loaded(val breed: Breed) : BreedDetailState()
+    object Error : BreedDetailState()
 }
 
 sealed class BreedGalleryState {
     object Loading : BreedGalleryState()
+    object Error : BreedGalleryState()
     class Loaded(val imageUrls: List<String>) : BreedGalleryState()
 }
-
 
 class BreedDetailViewModel(private val breedId: String, private val logic: BreedDetailLogic) :
     ViewModel() {
@@ -34,13 +35,13 @@ class BreedDetailViewModel(private val breedId: String, private val logic: Breed
 
     private fun loadBreedGallery() {
         viewModelScope.launch {
-            _breedGallery.value = BreedGalleryState.Loaded(logic.loadGallery(breedId))
+            _breedGallery.value = logic.loadGallery(breedId)
         }
     }
 
     private fun loadBreedInfo() {
         viewModelScope.launch {
-            _breed.value = BreedDetailState.Loaded(logic.loadBreedDetail(breedId))
+            _breed.value = logic.loadBreedDetail(breedId)
         }
     }
 }

@@ -36,15 +36,16 @@ fun BreedDetailScreen(
 ) {
     Column() {
         BreedDetailTopAppBar(navController)
+        BreedGallery(viewModel)
         when (val breedDetailState = viewModel.breedDetail.value) {
             is BreedDetailState.Loaded -> {
-                Column() {
-                    BreedGallery(viewModel)
-                    BreedDetail(breedDetailState.breed)
-                }
+                BreedDetail(breedDetailState.breed)
             }
             is BreedDetailState.Loading -> {
-                Text(text = "Carregando")
+                LinearProgressIndicator()
+            }
+            is BreedDetailState.Error -> {
+                Text(text = "Deu ruim")
             }
         }
     }

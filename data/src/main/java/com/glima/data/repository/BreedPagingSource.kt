@@ -3,7 +3,6 @@ package com.glima.data.repository
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.glima.domain.model.Breed
-import com.glima.domain.repository.BreedRepository
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -14,9 +13,9 @@ class BreedPagingSource(private val repository: BreedRepository) : PagingSource<
             val result = repository.fetchBreedsByPage(params.key ?: INITIAL_PAGE_INDEX)
 
             LoadResult.Page(
-                data = result,
+                data = result.data ?: emptyList(),
                 prevKey = params.key,
-                nextKey = if (result.isEmpty()) {
+                nextKey = if (result.data.isNullOrEmpty()) {
                     null
                 } else {
                     params.key?.plus(1) ?: INITIAL_PAGE_INDEX.plus(1)
