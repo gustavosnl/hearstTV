@@ -5,6 +5,7 @@ import com.glima.ilovecats.feature.detail.BreedDetailLogic
 import com.glima.ilovecats.feature.detail.BreedDetailViewModel
 import com.glima.ilovecats.feature.list.BreedListLogic
 import com.glima.ilovecats.feature.list.BreedListViewModel
+import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -16,7 +17,7 @@ object PresentationModule {
         }
 
         viewModel { (breedId: String) ->
-            BreedDetailViewModel(breedId = breedId, logic = get())
+            BreedDetailViewModel(dispatcher = Dispatchers.Main, breedId = breedId, logic = get())
         }
 
         single {

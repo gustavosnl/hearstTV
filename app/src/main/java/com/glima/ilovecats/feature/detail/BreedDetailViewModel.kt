@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.glima.domain.model.Breed
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 sealed class BreedDetailState {
@@ -20,6 +21,7 @@ sealed class BreedGalleryState {
 }
 
 class BreedDetailViewModel(
+    private val dispatcher: CoroutineDispatcher,
     private val breedId: String,
     private val logic: BreedDetailLogic
 ) : ViewModel() {
@@ -30,19 +32,15 @@ class BreedDetailViewModel(
     private val _breedGallery = mutableStateOf<BreedGalleryState>(BreedGalleryState.Loading)
     val breedGallery: State<BreedGalleryState> = _breedGallery
 
-    fun loadDetails() {
-        loadBreedGallery()
-        loadBreedInfo()
-    }
 
-    private fun loadBreedGallery() {
-        viewModelScope.launch {
+    fun loadBreedGallery() {
+        viewModelScope.launch(dispatcher) {
             _breedGallery.value = logic.loadGallery(breedId)
         }
     }
 
-    private fun loadBreedInfo() {
-        viewModelScope.launch {
+    fun loadBreedInfo() {
+        viewModelScope.launch(dispatcher) {
             _breed.value = logic.loadBreedDetail(breedId)
         }
     }

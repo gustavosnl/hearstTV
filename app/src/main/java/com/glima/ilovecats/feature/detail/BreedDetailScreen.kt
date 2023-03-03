@@ -34,6 +34,7 @@ fun BreedDetailScreen(
     navController: NavHostController,
     viewModel: BreedDetailViewModel = getViewModel(parameters = { parametersOf(breed) })
 ) {
+    viewModel.loadBreedInfo()
     Column() {
         BreedDetailTopAppBar(navController)
         BreedGallery(viewModel)
@@ -49,7 +50,6 @@ fun BreedDetailScreen(
             }
         }
     }
-
 }
 
 @Composable
