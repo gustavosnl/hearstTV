@@ -5,4 +5,8 @@
     <string name="breed_detail_nav_back">Navigate back to Breeds list</string>
     <string name="load_error">Something went wrong when loading the data</string>
     <string name="retry">Retry</string>
+    <string name="intelligence_attribute_label">Intelligence</string>
+    <string name="affection_attribute_label">Affection</string>
+    <string name="lifespan_attribute_label">Life Span</string>
+    <string name="lifespan_attribute_value">%s years</string>
 </resources>

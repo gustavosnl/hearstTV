@@ -45,7 +45,7 @@ fun BreedDetailScreen(
                 LinearProgressIndicator(Modifier.fillMaxWidth())
             }
             is BreedDetailState.Error -> {
-                Text(text = "Deu ruim")
+                Text(text = stringResource(id = R.string.load_error))
             }
         }
     }
@@ -105,7 +105,7 @@ fun BreedIntelligence(intelligence: Int) {
     AttributeIndicator(
         rating = intelligence,
         drawable = R.drawable.ic_kitty_intelligence,
-        label = "Intelligence"
+        label = stringResource(id = R.string.intelligence_attribute_label)
     )
 }
 
@@ -113,7 +113,7 @@ fun BreedIntelligence(intelligence: Int) {
 fun BreedAffection(affectionLevel: Int) {
     AttributeIndicator(
         rating = affectionLevel,
-        label = "Affection",
+        label = stringResource(id = R.string.affection_attribute_label),
         drawable = R.drawable.ic_kitty_affectiveness
     )
 }
@@ -125,9 +125,9 @@ fun BreedLifeSpan(lifeSpan: String) {
             imageVector = ImageVector.vectorResource(R.drawable.ic_kitty_lifespan),
             contentDescription = null,
         )
-        Text(text = "Life Span")
+        Text(text = stringResource(id = R.string.lifespan_attribute_label))
         Text(
-            text = "$lifeSpan years",
+            text = stringResource(id = R.string.lifespan_attribute_value, lifeSpan),
             fontWeight = FontWeight.Medium
         )
     }
@@ -149,8 +149,8 @@ fun AttributeIndicator(rating: Int, @DrawableRes drawable: Int, label: String) {
 fun RatingBar(
     rating: Int = 0,
 ) {
-
-    val unfilledStars = (5 - rating)
+    val MAX_RATE = 5
+    val unfilledStars = (MAX_RATE - rating)
 
     Row {
         repeat(rating) {
