@@ -1,24 +1,26 @@
 package com.glima.ilovecats.feature.detail
 
-import com.glima.data.di.DataModule
+import androidx.compose.runtime.State
 import com.glima.domain.model.Breed
-import com.glima.ilovecats.di.AppModule
-import com.glima.ilovecats.di.PresentationModule
-import io.kotest.core.extensions.Extension
-import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.koin.KoinExtension
+import com.glima.ilovecats.MainDispatcherRule
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
-import org.koin.test.KoinTest
-import org.koin.test.inject
+import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.junit.Rule
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class BreedDetailViewModelTest : DescribeSpec(), KoinTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+internal class BreedDetailViewModelTest {
 
-    private val breedDetailLogic: BreedDetailLogic by inject()
+    @get:Rule
+    val rule = MainDispatcherRule()
 
-    private val viewModel: BreedDetailViewModel by inject()
-
-    val breed = Breed(
+    private val breed = Breed(
         id = "cat",
         name = "cat",
         description = "cute cat",
@@ -28,86 +30,130 @@ class BreedDetailViewModelTest : DescribeSpec(), KoinTest {
         intelligence = 5
     )
 
-    init {
+    private val breedDetailLogic: BreedDetailLogic = mockk()
 
-        describe("BreedDetail") {
-            val breedState = viewModel.breedDetail
+    private val viewModel: BreedDetailViewModel by lazy {
+        BreedDetailViewModel(breed.id, breedDetailLogic)
+    }
 
-            context("#init") {
-                it("is loading") {
-                    breedState.value.shouldBe(BreedDetailState.Loading)
-                }
+    @Nested
+    @DisplayName("BreedDetail")
+    inner class BreedDetail {
+        @get:Rule
+        val rule = MainDispatcherRule()
+        private lateinit var breedDetailState: State<BreedDetailState>
 
-                context("When it loads successfully") {
+        @BeforeEach
+        fun setup() {
+            viewModel.loadDetails()
+            breedDetailState = viewModel.breedDetail
+        }
 
-                    beforeEach {
-                        coEvery {
-                            breedDetailLogic.loadBreedDetail(any())
-                        } returns BreedDetailState.Loaded(breed)
-                    }
+        @Nested
+        @DisplayName("#init")
+        inner class Init {
 
-                    it("should be Loaded with a breed") {
-                        breedState.value.shouldBe(BreedDetailState.Loaded(breed))
-                    }
-                }
-
-                context("When a error occurs while fetching details") {
-                    beforeEach {
-                        coEvery {
-                            breedDetailLogic.loadBreedDetail(any())
-                        } returns BreedDetailState.Error
-                    }
-                    it("should be Error") {
-                        breedState.value.shouldBe(BreedDetailState.Error)
-                    }
-                }
+            @Test
+            @DisplayName("initial state is loading")
+            fun isLoading() = runTest {
+                breedDetailState.value.shouldBe(BreedDetailState.Loading)
             }
         }
 
-        describe("BreedGallery") {
-            context("#init") {
-                val galleryState = viewModel.breedGallery
+        @Nested
+        @DisplayName("When it loads successfully")
+        inner class Loaded {
 
-                it("is loading") {
-                    galleryState.value.shouldBe(BreedGalleryState.Loading)
-                }
+            @BeforeEach
+            fun setup() {
+                coEvery {
+                    breedDetailLogic.loadBreedDetail(any())
+                } returns BreedDetailState.Loaded(breed)
+            }
 
-                context("When it loads successfully") {
+            @Test
+            @DisplayName("the state is loaded")
+            fun isLoaded() = runTest {
+                breedDetailState.value.shouldBe(BreedDetailState.Loaded(breed))
+            }
+        }
 
-                    beforeEach {
-                        coEvery {
-                            breedDetailLogic.loadGallery(any())
-                        } returns BreedGalleryState.Loaded(listOf("cat.url"))
-                    }
+        @Nested
+        @DisplayName("When a error occurs while fetching details")
+        inner class Error {
 
-                    it("should be Loaded with a list of urls") {
-                        galleryState.value.shouldBe(BreedGalleryState.Loaded(listOf("cat.url")))
-                    }
-                }
+            @BeforeEach
+            fun setup() {
+                coEvery {
+                    breedDetailLogic.loadBreedDetail(any())
+                } returns BreedDetailState.Error
+            }
 
-                context("When a error occurs while fetching gallery") {
-                    beforeEach {
-                        coEvery {
-                            breedDetailLogic.loadGallery(any())
-                        } returns BreedGalleryState.Error
-                    }
-                    it("should be Error") {
-                        galleryState.value.shouldBe(BreedGalleryState.Error)
-                    }
-                }
+            @Test
+            @DisplayName("the state is error")
+            fun isError() = runTest {
+                breedDetailState.value.shouldBe(BreedDetailState.Error)
             }
         }
     }
 
-    override fun extensions(): List<Extension> {
-        return listOf(
-            KoinExtension(
-                modules = listOf(
-                    AppModule.appModule,
-                    PresentationModule.presentationModule,
-                    DataModule.dataModule
-                )
-            )
-        )
+    @Nested
+    @DisplayName("BreedGallery")
+    inner class BreedGallery {
+        private lateinit var galleryState: State<BreedGalleryState>
+
+        @BeforeEach
+        fun setup() {
+            viewModel.loadDetails()
+            galleryState = viewModel.breedGallery
+        }
+
+        @Nested
+        @DisplayName("#init")
+        inner class Init {
+
+            @Test
+            @DisplayName("initial state is loading")
+            fun isLoading() = runTest {
+                galleryState.value.shouldBe(BreedDetailState.Loading)
+            }
+        }
+
+        @Nested
+        @DisplayName("When it loads successfully")
+        inner class Loaded {
+            private val urlsToLoad = listOf("url.cat.com")
+
+            @BeforeEach
+            fun setup() {
+                coEvery {
+                    breedDetailLogic.loadGallery(any())
+                } returns BreedGalleryState.Loaded(urlsToLoad)
+            }
+
+            @Test
+            @DisplayName("the state is loaded")
+            fun isLoaded() = runTest {
+                galleryState.value.shouldBe(BreedDetailState.Loaded(breed))
+            }
+        }
+
+        @Nested
+        @DisplayName("When a error occurs while fetching gallery")
+        inner class Error {
+
+            @BeforeEach
+            fun setup() {
+                coEvery {
+                    breedDetailLogic.loadGallery(any())
+                } returns BreedGalleryState.Error
+            }
+
+            @Test
+            @DisplayName("the state is error")
+            fun isError() = runTest {
+                galleryState.value.shouldBe(BreedDetailState.Error)
+            }
+        }
     }
 }

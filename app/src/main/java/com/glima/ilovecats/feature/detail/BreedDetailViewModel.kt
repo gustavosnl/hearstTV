@@ -19,8 +19,10 @@ sealed class BreedGalleryState {
     class Loaded(val imageUrls: List<String>) : BreedGalleryState()
 }
 
-class BreedDetailViewModel(private val breedId: String, private val logic: BreedDetailLogic) :
-    ViewModel() {
+class BreedDetailViewModel(
+    private val breedId: String,
+    private val logic: BreedDetailLogic
+) : ViewModel() {
 
     private val _breed = mutableStateOf<BreedDetailState>(BreedDetailState.Loading)
     val breedDetail: State<BreedDetailState> = _breed
@@ -28,9 +30,9 @@ class BreedDetailViewModel(private val breedId: String, private val logic: Breed
     private val _breedGallery = mutableStateOf<BreedGalleryState>(BreedGalleryState.Loading)
     val breedGallery: State<BreedGalleryState> = _breedGallery
 
-    init {
-        loadBreedInfo()
+    fun loadDetails() {
         loadBreedGallery()
+        loadBreedInfo()
     }
 
     private fun loadBreedGallery() {
