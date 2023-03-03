@@ -34,8 +34,7 @@ fun BreedDetailScreen(
     navController: NavHostController,
     viewModel: BreedDetailViewModel = getViewModel(parameters = { parametersOf(breed) })
 ) {
-    viewModel.loadBreedInfo()
-    Column() {
+    Column {
         BreedDetailTopAppBar(navController)
         BreedGallery(viewModel)
         when (val breedDetailState = viewModel.breedDetail.value) {

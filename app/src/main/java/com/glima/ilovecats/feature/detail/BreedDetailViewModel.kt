@@ -33,6 +33,11 @@ class BreedDetailViewModel(
     val breedGallery: State<BreedGalleryState> = _breedGallery
 
 
+    init {
+        loadBreedInfo()
+        loadBreedGallery()
+    }
+
     fun loadBreedGallery() {
         viewModelScope.launch(dispatcher) {
             _breedGallery.value = logic.loadGallery(breedId)
